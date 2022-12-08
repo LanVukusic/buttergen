@@ -29,20 +29,20 @@ export class AudioIn {
   micSelect() {
     return new Promise((resolve, reject) => {
       let out;
-      // @ts-ignore
-      navigator.getUserMedia(
-        { audio: true },
-        (stream) => {
-          var micsourceNode = this.audioContext.createMediaStreamSource(stream);
 
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then((stream) => {
+          var micsourceNode =
+            // @ts-ignore
+            this.audioContext?.createMediaStreamSource(stream);
           out = this.connectMicAudio(micsourceNode, this.audioContext);
           resolve(out);
-        },
-        (err) => {
+        })
+        .catch((err) => {
           console.log("Error getting audio stream from getUserMedia");
           reject(err);
-        }
-      );
+        });
     });
   }
 
@@ -58,16 +58,6 @@ export class Vis {
 
   constructor() {}
 
-  // connectToAudioAnalyzer(sourceNode) {
-  //   this.delayedAudible = this.audioContext.createDelay();
-  //   this.delayedAudible.delayTime.value = 0.26;
-
-  //   sourceNode.connect(this.delayedAudible);
-  //   this.delayedAudible.connect(this.audioContext.destination);
-
-  //   this.visualizer.connectAudio(this.delayedAudible);
-  // }
-
   connectAudio(sourceNode) {
     this.visualizer.connectAudio(sourceNode);
   }
@@ -77,7 +67,7 @@ export class Vis {
     this.visualizer.render();
   }
 
-  initPlayer(canvas, audioContext, sourceNode, size = 1000) {
+  initPlayer(canvas, audioContext, sourceNode, size = 1000, preset) {
     this.visualizer = butterchurn.default.createVisualizer(
       audioContext,
       canvas,
@@ -85,13 +75,19 @@ export class Vis {
         width: size,
         height: size,
         pixelRatio: window.devicePixelRatio || 1,
-        textureRatio: 1,
-        zoom: 1,
+        textureRatio: 2,
+        zoom: 0.2,
       }
     );
-    this.visualizer.loadPreset(defaults, 0.0);
+    if (preset) {
+      this.visualizer.loadPreset(preset, 1.0);
+    }
     // this.visualizer.loadPreset(presets[presetKeys[presetIndex]], 5.7);
     this.connectAudio(sourceNode);
     this.startRenderer();
+  }
+
+  loadPreset(preset) {
+    this.visualizer.loadPreset(preset, 0.2);
   }
 }

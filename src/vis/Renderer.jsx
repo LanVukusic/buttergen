@@ -1,27 +1,51 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Vis } from "./lib";
 
-const SIZE = 500;
+export const Renderer = ({ aud, preset, size }) => {
+  const ref = useRef(null);
+  const [vis, setVis] = useState(null);
+  const [bg, setBg] = useState("gray");
 
-export const Renderer = ({ aud }) => {
-  const ref = React.useRef(null);
+  // console.log(preset.baseVals.wave_mode);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (aud.audioContext && aud.getOutputNode()) {
       const vis = new Vis();
-      vis.initPlayer(ref.current, aud.audioContext, aud.getOutputNode(), SIZE);
+      vis.initPlayer(ref.current, aud.audioContext, aud.getOutputNode(), size);
+
+      console.log("AAAAA SPET DELAM VSE");
+      // @ts-ignore
+      setVis(vis);
     } else {
       console.log("no audio context or output node");
     }
   }, []);
 
+  // use effect for preset changes
+  useEffect(() => {
+    if (vis) {
+      // @ts-ignore
+      vis.loadPreset(preset);
+    }
+  }, [preset]);
+
   return (
     <div
       onClick={() => {
-        console.log("click");
+        setBg("white");
+        setTimeout(() => {
+          setBg("gray");
+        }, 100);
       }}
     >
-      <canvas ref={ref} width={SIZE} height={SIZE} />
+      <canvas
+        ref={ref}
+        width={size}
+        height={size}
+        style={{
+          border: "1px solid " + bg,
+        }}
+      />
     </div>
   );
 };
