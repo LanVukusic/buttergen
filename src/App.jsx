@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { m, Manager } from "./genetic/Manager";
+import { Manager } from "./genetic/Manager";
 import { AudioIn } from "./vis/lib";
 import { Renderer } from "./vis/Renderer";
+
+const m = new Manager(8, 440);
 
 const App = function App() {
   const [audioIn, setAudioIn] = useState(new AudioIn());

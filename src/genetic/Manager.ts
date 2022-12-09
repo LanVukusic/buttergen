@@ -2,11 +2,11 @@ import { defaults } from "../vis/preset";
 import { Fenotype, Gene, sex } from "./genetic";
 import butterchurnPresets from "butterchurn-presets";
 
-// 4 9 11 14
+// 4 9 11 14 18
 
 const presets = butterchurnPresets.getPresets();
 const options = Object.keys(presets);
-let selected = options[18];
+let selected = options[4];
 const preset = presets[selected];
 console.log(preset);
 
@@ -32,7 +32,7 @@ class VisEntity extends Fenotype {
 
     if (!genes || genes.length === 0) {
       this.genes = [
-        new Gene(0, 0, Math.random() * 0, "int"), //wave_mode
+        new Gene(0, 7, Math.random() * 7, "int"), //wave_mode
         new Gene(0, 1, Math.random() * 1, "float"), //wave_speed
         new Gene(0, 1, Math.random() * 1, "float"), //wave_r
         new Gene(0, 1, Math.random() * 1, "float"), //wave_g
@@ -49,7 +49,7 @@ class VisEntity extends Fenotype {
         //rot
         new Gene(-1, 1, Math.random() * 1, "float"), //rot
         // decay
-        new Gene(0, 1, Math.random() * 1, "float"), //decay
+        new Gene(0.7, 1, Math.random() * 1, "float"), //decay
         // echo_zoom
         new Gene(0, 1, Math.random() * 1, "float"), //echo_zoom
         // gama_adj
@@ -70,6 +70,8 @@ class VisEntity extends Fenotype {
         new Gene(0, 1, Math.random() * 1, "float"), //wave_scale
         // warpanimspeed
         new Gene(0, 1, Math.random() * 1, "float"), //warpanimspeed
+        // bled
+        new Gene(0, 1, Math.random() * 1, "float"), //bled
       ];
     }
 
@@ -110,7 +112,7 @@ class VisEntity extends Fenotype {
     presetDefault.baseVals.echo_orient = this.genes[22].value; //echo_orient
     presetDefault.baseVals.wave_scale = this.genes[23].value; //wave_scale
     presetDefault.baseVals.warpanimspeed = this.genes[24].value; //warpanimspeed
-
+    presetDefault.baseVals.bled = this.genes[25].value; //bled
     return presetDefault;
   }
 }
@@ -147,5 +149,3 @@ export class Manager {
     return this.entities;
   }
 }
-
-export const m = new Manager(8, 700);
