@@ -1,5 +1,7 @@
 # 🧬 ButterGen
 
+Try it here: [https://buttergen.lanvukusic.com/](https://buttergen.lanvukusic.com/)
+
 ## How to
 
 In ordre to use it, load the page and connect your microphone by clicking the only button that exists on the page.  
